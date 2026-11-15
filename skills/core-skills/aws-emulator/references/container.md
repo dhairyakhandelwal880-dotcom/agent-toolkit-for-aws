@@ -81,7 +81,12 @@ Wait for it (the container needs a few seconds):
 ```bash
 for i in $(seq 30); do
   curl -sf --cacert ~/.aws/emulator/9297/ca.pem https://127.0.0.1:9297/__admin/health && break
-  sleep 1
+  if [ "$i" -eq 30 ]; then
+    echo "aws-emulator failed to become healthy on 127.0.0.1:9297" >&2
+    false
+  else
+    sleep 1
+  fi
 done
 ```
 
